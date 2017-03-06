@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<e:EnumDefine xmlns:e="http://leigient.549n.com/EnumDefine"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://leigient.549n.com/EnumDefine.xsd ../Schema/EnumDefine.xsd"
+ e:Namespace="CommonEnum" e:Version="1" e:Comment="common enum defines for 549n Project.">
+
+<!-- Enum Category -->
+<e:EnumCategory e:EnumName="SampleGenderType" e:IDRangeMin="0" e:Comment="성별" >
+  <e:EnumData e:ID="Male" e:Comment="남성" />
+  <e:EnumData e:ID="Female" e:Comment="여성" />
+  <e:EnumData e:ID="Neutral" e:Comment="중성" />
+</e:EnumCategory>
+
+<e:EnumCategory e:EnumName="SampleElementType" e:IDRangeMin="0" e:Comment="속성" >
+  <e:EnumData e:ID="Earth" e:Comment="지" />
+  <e:EnumData e:ID="Water" e:Comment="수" />
+  <e:EnumData e:ID="Fire" e:Comment="화" />
+  <e:EnumData e:ID="Wind" e:Comment="풍" />
+</e:EnumCategory>
+
+<e:EnumCategory e:EnumName="SampleJobClassType" e:IDRangeMin="0" e:Comment="직업 클래스" >
+  <e:EnumData e:ID="Knight" e:Comment="기사" />
+  <e:EnumData e:ID="MagicUser" e:Comment="마법사" />
+  <e:EnumData e:ID="Cleric" e:Comment="성직자" />
+  <e:EnumData e:ID="Thief" e:Comment="도둑" />
+</e:EnumCategory>
+
+</e:EnumDefine>

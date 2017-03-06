@@ -1,0 +1,2 @@
+C:\Work\DevSupport\549n_SGDS\Script\T4CodeGenerator\bin\Debug\T4CodeGenerator.exe.config
+C:\Work\DevSupport\549n_SGDS\Script\T4CodeGenerator\obj\Debug\T4CodeGenerator.csprojResolveAssemblyReference.cache

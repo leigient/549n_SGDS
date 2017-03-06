@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:samplecid="http://leigient.549n.com/schema/SampleCID"
+	xmlns:commdef="http://leigient.549n.com/schema/SampleEnumType"
+	targetNamespace="http://leigient.549n.com/schema/SampleInfo"
+	elementFormDefault="qualified"
+	attributeFormDefault="qualified"
+	xmlns="http://leigient.549n.com/schema/SampleInfo"
+	version="1.0">
+
+<xs:annotation>
+	<xs:appinfo>SampleInfo Version 1.0</xs:appinfo>
+	<xs:documentation>SampleInfo Version 1.0</xs:documentation>
+</xs:annotation>
+
+<xs:import namespace="http://leigient.549n.com/schema/SampleCID"        schemaLocation="SampleCID.xsd" />
+<xs:import namespace="http://leigient.549n.com/schema/SampleEnumType"  schemaLocation="SampleEnumType.xsd" />
+
+<xs:complexType name="SampleInfo">
+	<xs:attribute name="Key"                type="samplecid:SampleCID"         use="required" />
+	<xs:attribute name="GenderType"        type="commdef:SampleGenderType"       use="required" />
+	<xs:attribute name="ElementType"       type="commdef:SampleElementType"      use="required" />
+	<xs:attribute name="ClassType"       type="commdef:SampleJobClassType"      use="required" />
+	<xs:attribute name="SampleCID"        type="samplecid:SampleCID"         use="required" />
+	<xs:attribute name="SampleInt"      type="xs:int"                  use="required" />
+	<xs:attribute name="SampleBoolean"      type="xs:boolean"              use="required" />
+	<xs:attribute name="SampleFloat"        type="xs:float"                  use="required" />
+	<xs:attribute name="SampleString" type="xs:string"       use="required" />
+</xs:complexType>
+
+<xs:element name="SampleDataMap">
+<xs:complexType>
+<xs:sequence>
+	<xs:element name="SampleData" type="SampleInfo" minOccurs="1" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+</xs:schema>

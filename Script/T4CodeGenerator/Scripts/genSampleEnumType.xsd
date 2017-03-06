@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://leigient.549n.com/schema/SampleEnumType"
+	elementFormDefault ="qualified"
+	attributeFormDefault ="qualified"
+	xmlns="http://leigient.549n.com/schema/SampleEnumType"
+	version="1.0" >
+
+<!--
+	type defines for Project 549n
+-->
+	<xs:annotation>
+	</xs:annotation>
+
+
+	<!--성별-->
+	<xs:simpleType name="SampleGenderType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration id="SampleGenderType_0000000000000000" value="SampleGenderType_NONE" />
+			<xs:enumeration id="SampleGenderType_0000000000000001" value="SampleGenderType_Male" />	<!--남성-->
+			<xs:enumeration id="SampleGenderType_0000000000000002" value="SampleGenderType_Female" />	<!--여성-->
+			<xs:enumeration id="SampleGenderType_0000000000000003" value="SampleGenderType_Neutral" />	<!--중성-->
+			<xs:enumeration id="SampleGenderType_0000000000000004" value="SampleGenderType_MAX" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!--속성-->
+	<xs:simpleType name="SampleElementType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration id="SampleElementType_0000000000000000" value="SampleElementType_NONE" />
+			<xs:enumeration id="SampleElementType_0000000000000001" value="SampleElementType_Earth" />	<!--지-->
+			<xs:enumeration id="SampleElementType_0000000000000002" value="SampleElementType_Water" />	<!--수-->
+			<xs:enumeration id="SampleElementType_0000000000000003" value="SampleElementType_Fire" />	<!--화-->
+			<xs:enumeration id="SampleElementType_0000000000000004" value="SampleElementType_Wind" />	<!--풍-->
+			<xs:enumeration id="SampleElementType_0000000000000005" value="SampleElementType_MAX" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!--직업 클래스-->
+	<xs:simpleType name="SampleJobClassType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration id="SampleJobClassType_0000000000000000" value="SampleJobClassType_NONE" />
+			<xs:enumeration id="SampleJobClassType_0000000000000001" value="SampleJobClassType_Knight" />	<!--기사-->
+			<xs:enumeration id="SampleJobClassType_0000000000000002" value="SampleJobClassType_MagicUser" />	<!--마법사-->
+			<xs:enumeration id="SampleJobClassType_0000000000000003" value="SampleJobClassType_Cleric" />	<!--성직자-->
+			<xs:enumeration id="SampleJobClassType_0000000000000004" value="SampleJobClassType_Thief" />	<!--도둑-->
+			<xs:enumeration id="SampleJobClassType_0000000000000005" value="SampleJobClassType_MAX" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

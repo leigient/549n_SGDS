@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://leigient.549n.com/EnumDefine"
+	elementFormDefault ="qualified"
+	attributeFormDefault ="qualified"
+	xmlns="http://leigient.549n.com/EnumDefine"
+	version="1.0">
+
+<xs:annotation>
+	<xs:appinfo>Common Enum Type Define</xs:appinfo>
+	<xs:documentation>Common Enum Type Define Version 1.0</xs:documentation>
+</xs:annotation>
+
+<!-- Initial Enumeration Define -->
+
+<!-- Initial Enumeration Define End -->
+
+<xs:complexType name="EnumType">
+	<xs:attribute name="ID" type="xs:string" use="required"/>
+	<xs:attribute name="Value" type="xs:string" use="optional"/>
+	<xs:attribute name="MappingData" type="xs:string" use="optional"/>
+	<xs:attribute name="Comment" type="xs:string" use="optional"/>
+	<xs:attribute name="UMETA" type="xs:string" use="optional"/>
+</xs:complexType>
+
+<xs:element name="EnumDefine">
+<xs:complexType>
+
+<xs:sequence>
+	<xs:element name="EnumCategory"  minOccurs="1" maxOccurs="unbounded">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="EnumData" type="EnumType" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="EnumName" type="xs:string" use="required"/>
+			<xs:attribute name="IDRangeMin" type="xs:int" use="required"/> <!-- Enum ID range min -->
+			<xs:attribute name="IDRangeMax" type="xs:int" use="optional"/> <!-- Enum ID range max -->
+			<xs:attribute name="Comment" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+</xs:sequence>
+
+<xs:attribute name="Namespace" type="xs:string" use="required"/>		
+<xs:attribute name="Version" type="xs:unsignedInt" use="required"/>		
+<xs:attribute name="Comment" type="xs:string" use="required"/>			
+	
+</xs:complexType>
+</xs:element>
+
+</xs:schema>

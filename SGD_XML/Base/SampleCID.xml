@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:CIDXmlTypeDataMap xmlns:ns1="http://leigient.549n.com/schema/CIDXmlType">
+	<ns1:CIDXmlTypeData ns1:id="000000000000000000" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000001" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000002" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000003" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000004" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000005" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000006" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000007" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000008" ns1:value="SampleCID"/>
+	<ns1:CIDXmlTypeData ns1:id="000000000000000009" ns1:value="SampleCID"/>
+</ns1:CIDXmlTypeDataMap>

@@ -1,0 +1,512 @@
+﻿<#+
+
+// 변수가 할당되고 사용되지 않을 경우 발생하는 compiler warning 0219를 disable 처리..
+#pragma warning disable 0219
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Common Defines
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+// predefined const string
+const string _CRLF	= "\r\n";
+const string _DRLF	= _CRLF + _CRLF;	// double _crlf
+const string _BC	= " ";		// 시작 엘레먼트의 정의를 위한 공백 문자(black character)
+const string _CMT	= "// ";
+const string _SC	= ";";
+const string _CL	= ":";
+const string _QM	= "\"";
+const string _UB	= "_";
+
+const string _CMA	= ",";
+
+const string _EQL	= _BC + "=" + _BC;
+const string _EQT	= _BC + "=" + _TAB;
+const string _EOL	= _SC + _CRLF;
+
+const string _TAB	= "\t";
+const string _TCT	= _TAB + _CMT;
+const string _TEP	= _TAB + _EP;
+const string _TBC	= _TAB + _BC;
+const string _TCA	= _TAB + _CMA;
+const string _TCE	= _TAB + _CMA + _EP;
+
+const string _EP	= "e";		// ENUM Prefix
+const string _CP	= "C";		// class prefix
+
+const string _CM	= "m";		// class member variable prefix
+const string _FP	= "p";		// function parameter prefix
+const string _FL	= "a";		// function local variable prefix
+
+const string _XMLCMTBGN = "<!--";
+const string _XMLCMTEND = "-->";
+const string _XMLTCT	= _TAB + _XMLCMTBGN;
+
+const string _PBVER	= "proto2";
+
+// predefined const int
+const int CMD_RETURN_ERROR = -1;	// cmd 형식으로 실행시 에러 리턴 값
+const int GET_ALL_ITEM = 0;
+
+// predefines for type convert functions
+const string strCIDPrefix = "cid";
+const string strXSPrefix = "xs";
+
+const string strTablePrerfix = ""; //"AMP";
+
+const string strDBIDPostfix = "DBID";
+const int nDBIDPostfix = 4;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// XML To C# Type
+//////////////////////////////////////////////////////////////////////////////////////////////////
+void PrintErrorNExit(string strError)
+{
+	Console.WriteLine("[AMPGEN][ERROR] {0}", strError);
+	Debug.WriteLine("[AMPGEN][ERROR] " + strError);
+	Environment.Exit(CMD_RETURN_ERROR);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// XML To C# Type
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+string convertXML2CSType(string strType)
+{
+	switch (strType)
+	{
+		case "int":
+			return "Int32";
+		case "unsignedInt":
+			return "UInt32";
+		case "long":
+			return "Int64";
+		case "unsignedLong":
+			return "UInt64";
+		case "short":
+			return "Int16";
+		case "unsignedShort":
+			return "UInt16";
+		case "byte":
+			return "Byte";
+		case "unsignedByte":
+			return "SByte";
+		case "float":
+			return "Single";
+		case "string":
+			return "string";
+		case "boolean":
+			return "Boolean";
+		default:
+			return "Type2Error";
+	}
+}
+
+string generateXML2CSType(string strXmlType)
+{
+	// Element의 type attribute 값이 'cid'로 시작하거나 참조된 값이 "~CID"인 경우..
+	if ((strXmlType.Substring(0, strCIDPrefix.Length) == strCIDPrefix) || (strXmlType.Substring(strXmlType.Length - strCIDPrefix.Length, strCIDPrefix.Length)) == "CID")
+	{
+		return "UInt64";
+	}
+	// name이 DBID로 끝나는 attribute의 경우에는 DBID로 취급..
+	//else if (strXmlType.Substring((strXmlType.Length - nDBIDPostfix), nDBIDPostfix) == strDBIDPostfix)
+	//{
+	//	return "UInt64";
+	//}
+	// xml namespace(xs:)인 경우..
+	else if (strXmlType.Substring(0, strXSPrefix.Length) == strXSPrefix)
+	{
+		return convertXML2CSType(strXmlType.Substring((strXSPrefix.Length + 1), (strXmlType.Length - strXSPrefix.Length - 1)));
+	}
+	// 위 경우들이 아니면, Enum Type으로 가정한다.
+	else
+	{
+		return "Int32";
+	}
+
+	//return "Type2Error";
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// XML To C++ Type
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+string generateXML2CPPType(string strType, bool bUseOdbc = true)
+{
+	switch (strType)
+	{
+		case "int":
+			return "int";
+		case "unsignedInt":
+			return "unsigned int";
+		case "long":
+			return "int64_t";
+		case "unsignedLong":
+		case "DBID":			// strDBIDPostfix
+		case "CID":
+			//return "_strtoui64(aXMLAttr->value(), NULL, 10);";
+			return "uint64_t";
+		case "short":
+			return "int16_t";
+		case "unsignedShort":
+			return "uint16_t";
+		case "byte":
+			return "int8_t";
+		case "unsignedByte":
+			return "uint8_t";
+		case "float":
+		{
+			// 2016-06-08 leigient ODBC - C++ Type Mapping (FLOAT-double) 을 위하여 반환값을 double로 변경
+			if (bUseOdbc == true) { return "double"; }
+			else { return "float"; }
+		}
+		case "string":
+			return "string";
+		case "boolean":
+		{
+			// 2016-06-08 leigient ODBC - C++ Type Mapping시에는 bool을 uint8_t로 변경
+			if (bUseOdbc == true) { return "uint8_t"; }
+			else { return "bool"; }
+		}
+		default:
+			return "Type2Error";
+	}
+}
+
+string generateXML2UE4Type(string strType)
+{
+	switch (strType)
+    {
+		case "int":
+			return "int32";
+		case "unsignedInt":
+			return "unsigned int";
+		case "long":
+			return "int64_t";
+		case "unsignedLong":
+		case "DBID":			// strDBIDPostfix
+			//return "_strtoui64(aXMLAttr->value(), NULL, 10);";
+			return "uint64_t";
+		case "short":
+			return "int16_t";
+		case "unsignedShort":
+			return "uint16_t";
+		case "byte":
+			return "int8_t";
+		case "unsignedByte":
+			return "uint8_t";
+		case "float":
+			return "float";
+		case "string":
+			return "FString";
+		case "boolean":
+			return "bool";
+		default:
+			return "Type2Error";
+    }
+}
+
+string convertXMLDefaultValue2CPP(string strType)
+{
+	switch (strType)
+    {
+		case "int":
+			return "0;";
+		case "unsignedInt":
+			return "0;";
+		case "long":
+			return "0;";
+		case "unsignedLong":
+		case "DBID":			// strDBIDPostfix
+			//return "_strtoui64(aXMLAttr->value(), NULL, 10);";
+			return "0;";
+		case "short":
+			return "0;";
+		case "unsignedShort":
+			return "0;";
+		case "byte":
+			return "0;";
+		case "unsignedByte":
+			return "0;";
+		case "float":
+			return "0.0f;";
+		case "string":
+			return "string(\"\");";
+		case "boolean":
+			return "false;";
+		default:
+			return "Type2Error;";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// XML To ProtoBuffer Type
+//////////////////////////////////////////////////////////////////////////////////////////////////
+string generateXML2Proto(string strType)
+{
+	switch (strType)
+	{
+		case "int":
+			return "int32";
+		case "unsignedInt":
+			return "uint32";
+		case "long":
+			return "int64";
+		case "unsignedLong":
+		case "DBID":			// strDBIDPostfix
+			//return "_strtoui64(aXMLAttr->value(), NULL, 10);";
+			return "uint64";
+		case "short":
+			return "int32";
+		case "unsignedShort":
+			return "uint32";
+		case "byte":
+			return "int32";
+		case "unsignedByte":
+			return "uint32";
+		case "float":
+			return "float";
+		case "string":
+			return "string";
+		case "boolean":
+			return "bool";
+		default:
+			return "Type2Error";
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// XML To DB & ODBC Type
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+string generateXML2DBType(string strXmlType)
+{
+	// Element의 type attribute 값이 'cid'로 시작하거나 참조된 값이 "~CID"인 경우..
+	if ((strXmlType.Substring(0, strCIDPrefix.Length) == strCIDPrefix) || (strXmlType.Substring(strXmlType.Length - strCIDPrefix.Length, strCIDPrefix.Length)) == "CID")
+	{
+		return "BIGINT UNSIGNED";
+	}
+	// name이 DBID로 끝나는 attribute의 경우에는 DBID로 취급..
+	//else if (strXmlType.Substring((strXmlType.Length - nDBIDPostfix), nDBIDPostfix) == strDBIDPostfix)
+	//{
+	//	return "BIGINT UNSIGNED";
+	//}
+	// xml namespace(xs:)인 경우..
+	else if (strXmlType.Substring(0, strXSPrefix.Length) == strXSPrefix)
+	{
+		return convertXML2DB(strXmlType.Substring((strXSPrefix.Length + 1), (strXmlType.Length - strXSPrefix.Length - 1)));
+	}
+	// 위 경우들이 아니면, INT로 가정한다.
+	else
+	{
+		return "INT";
+	}
+
+	//return "Type2Error";
+}
+
+string convertXML2DB(string strType)
+{
+	switch (strType)
+	{
+		case "int":
+			return "INT";
+		case "unsignedInt":
+			return "INT UNSIGNED";
+		case "long":
+			return "BIGINT";
+		case "unsignedLong":
+			return "BIGINT UNSIGNED";
+		case "short":
+			return "SMALLINT";
+		case "unsignedShort":
+			return "SMALLINT UNSIGNED";
+		case "byte":
+			return "TINYINT";
+		case "unsignedByte":
+			return "TINYINT UNSIGNED";
+		case "float":
+			return "FLOAT";
+		case "string":
+			return "VARCHAR";
+		case "boolean":
+			return "TINYINT";
+		default:
+			return "Type2Error";
+	}
+}
+
+string generateXMLDefaultValue2DB(string strXmlType)
+{
+	// Element의 type attribute 값이 'cid'로 시작하거나 참조된 값이 "~CID"인 경우..
+	if ((strXmlType.Substring(0, strCIDPrefix.Length) == strCIDPrefix) || (strXmlType.Substring(strXmlType.Length - strCIDPrefix.Length, strCIDPrefix.Length)) == "CID")
+	{
+		return "0";
+	}
+	// name이 DBID로 끝나는 attribute의 경우에는 DBID로 취급..
+	//else if (strXmlType.Substring((strXmlType.Length - nDBIDPostfix), nDBIDPostfix) == strDBIDPostfix)
+	//{
+	//	return "BIGINT UNSIGNED";
+	//}
+	// xml namespace(xs:)인 경우..
+	else if (strXmlType.Substring(0, strXSPrefix.Length) == strXSPrefix)
+	{
+		return convertXMLDefaultValue2DB(strXmlType.Substring((strXSPrefix.Length + 1), (strXmlType.Length - strXSPrefix.Length - 1)));
+	}
+	// 위 경우들이 아니면, INT로 가정한다.
+	else
+	{
+		return "0";
+	}
+
+	//return "Type2Error";
+}
+
+string convertXMLDefaultValue2DB(string strType)
+{
+	switch (strType)
+	{
+		case "int":
+			return "0";
+		case "unsignedInt":
+			return "0";
+		case "long":
+			return "0";
+		case "unsignedLong":
+		case "DBID":			// strDBIDPostfix
+			//return "_strtoui64(aXMLAttr->value(), NULL, 10);";
+			return "0";
+		case "short":
+			return "0";
+		case "unsignedShort":
+			return "0";
+		case "byte":
+			return "0";
+		case "unsignedByte":
+			return "0";
+		case "float":
+			return "0.0";
+		case "string":
+			return "''";
+		case "boolean":
+			return "0";
+		default:
+			return "Type2Error";
+	}
+}
+
+string generateXML2ODBCType(string strType)
+{
+	switch (strType)
+    {
+		case "int":
+			return "CSqlInt";
+		case "unsignedInt":
+			return "CSqlUInt";
+		case "long":
+			return "CSqlBigInt";
+		case "unsignedLong":
+		case "DBID":			// strDBIDPostfix
+		case "CID":
+			//return "_strtoui64(aXMLAttr->value(), NULL, 10);";
+			return "CSqlUBigInt";
+		case "short":
+			return "CSqlSmallInt";
+		case "unsignedShort":
+			return "CSqlUSmallInt";
+		case "byte":
+			return "CSqlTinyInt";
+		case "unsignedByte":
+			return "CSqlUTinyInt";
+		case "float":
+			return "CSqlFloat";
+		case "string":
+			return "CSqlWVarChar(255)";
+		case "boolean":
+			return "CSqlTinyInt";
+		default:
+			return "Type2Error";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// XML To golang Type
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+string convertXML2GoType(string strType)
+{
+	switch (strType)
+	{
+		case "int":
+			return "int32";
+		case "unsignedInt":
+			return "uint32";
+		case "long":
+			return "int64";
+		case "unsignedLong":
+			return "uint64";
+		case "short":
+			return "int16";
+		case "unsignedShort":
+			return "uint16";
+		case "byte":
+//			return "int8";
+			return "byte";
+		case "unsignedByte":
+//			return "uint8";
+			return "byte";
+		case "float":
+			return "float32";
+		case "string":
+			return "string";
+		case "boolean":
+			return "bool";
+		default:
+			return "Type2Error";
+	}
+}
+
+string convertCPP2GoType(string strType)
+{
+	switch (strType)
+	{
+		case "int":
+		case "long":
+		case "__int32":
+		case "int32_t":
+			return "int32";
+		case "unsigned int":
+		case "unsigned __int32":
+		case "unsigned long":
+		case "uint32_t":
+			return "uint32";
+		case "int64":
+		case "long long":
+		case "int64_t":
+			return "int64";
+		case "unsigned __int64":
+		case "unsigned long long":
+		case "uint64_t":
+			return "uint64";
+		case "short":
+		case "__int16":
+			return "Int16";
+		case "unsignedShort":
+		case "unsigned __int16":
+			return "UInt16";
+		case "byte":
+			return "Byte";
+		case "unsignedByte":
+			return "SByte";
+		case "float":
+			return "float";
+		case "double":
+		case "long double":
+			return "float64";
+		case "string":
+			return "string";
+		default:
+			return "Type2Error";
+	}
+}
+#>
