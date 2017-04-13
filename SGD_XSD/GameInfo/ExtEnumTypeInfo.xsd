@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:enumtype="http://leigient.549n.com/schema/SampleEnumType"
+	targetNamespace="http://leigient.549n.com/schema/ExtEnumType"
+	elementFormDefault="qualified"
+	attributeFormDefault="qualified"
+	xmlns="http://leigient.549n.com/schema/ExtEnumType"
+	version="1.0">
+
+<xs:annotation>
+	<xs:appinfo>ExtEnumType Version 1.0</xs:appinfo>
+	<xs:documentation>ExtEnumType Version 1.0</xs:documentation>
+</xs:annotation>
+
+<xs:import namespace="http://leigient.549n.com/schema/SampleEnumType"  schemaLocation="SampleEnumType.xsd" />
+
+<xs:complexType name="ExtEnumTypeInfo">
+	<xs:attribute name="Type" type="enumtype:ExtEnumType" use="required" />
+	<xs:attribute name="Value" type="xs:string" use="required" />
+	<xs:attribute name="Cmt" type="xs:string" use="optional" />
+</xs:complexType>
+
+<xs:element name="ExtEnumTypeDataMap">
+<xs:complexType>
+<xs:sequence>
+	<xs:element name="ExtEnumTypeData" type="ExtEnumTypeInfo" minOccurs="1" maxOccurs="unbounded" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+</xs:schema>

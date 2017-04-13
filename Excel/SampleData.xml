@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:SampleDataMap xmlns:ns1="http://leigient.549n.com/schema/SampleInfo">
+	<ns1:SampleData ns1:Key="SampleCID_000000000000000000" ns1:GenderType="SampleGenderType_Male" ns1:ElementType="SampleElementType_Earth" ns1:ClassType="SampleJobClassType_MagicUser" ns1:SampleCID="SampleCID_000000000000019999" ns1:SampleInt="999" ns1:SampleBoolean="false" ns1:SampleFloat="0.12345" ns1:SampleString="test string"/>
+	<ns1:SampleData ns1:Key="SampleCID_000000000000000000" ns1:GenderType="SampleGenderType_Male" ns1:ElementType="SampleElementType_Earth" ns1:ClassType="SampleJobClassType_MagicUser" ns1:SampleCID="SampleCID_000000000000019999" ns1:SampleInt="999" ns1:SampleBoolean="false" ns1:SampleFloat="0.12345" ns1:SampleString="test string"/>
+	<ns1:SampleData ns1:Key="SampleCID_000000000000000000" ns1:GenderType="SampleGenderType_Male" ns1:ElementType="SampleElementType_Earth" ns1:ClassType="SampleJobClassType_MagicUser" ns1:SampleCID="SampleCID_000000000000019999" ns1:SampleInt="999" ns1:SampleBoolean="false" ns1:SampleFloat="0.12345" ns1:SampleString="test string"/>
+</ns1:SampleDataMap>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:ExtEnumTypeDataMap xmlns:ns1="http://leigient.549n.com/schema/ExtEnumTypeInfo">
+	<ns1:ExtEnumTypeData ns1:Type="ExtEnumType_SampleCID" ns1:Value="SampleCID" ns1:Cmt="verifying test"/>
+	<ns1:ExtEnumTypeData ns1:Type="ExtEnumType_SampleGenderType" ns1:Value="SampleEnumType|SampleGenderType" ns1:Cmt="SampleEnumType.xsd"/>
+	<ns1:ExtEnumTypeData ns1:Type="ExtEnumType_ResourceFileName" ns1:Value="..\ResourceFolder\" ns1:Cmt="C:\Work\DevSupport\549n_SGDS\ResourceFolder\"/>
+</ns1:ExtEnumTypeDataMap>

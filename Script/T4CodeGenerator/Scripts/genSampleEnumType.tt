@@ -23,7 +23,7 @@
 <# // gen .xsd file using defined .xml #>
 <# #>
 <# // include files #>
-<#@include file="T4CommonDefine.t4" #>
+<#@include file="T4SharedModule.t4" #>
 <# #>
 <#
 // 변수가 할당되고 사용되지 않을 경우 발생하는 compiler warning 0219를 disable 처리..
@@ -73,11 +73,11 @@
 			foreach (string Parameter in Parameters)
 			{
 				string[] strParams = Parameter.Split('!');
-				if (strParams[0] == "option")
+				if (strParams[0] == "t4option")
 				{
-					foreach(string strAmpOption in strParams)
+					foreach(string strParam in strParams)
 					{
-						string[] strOptions = strAmpOption.Split('=');
+						string[] strOptions = strParam.Split('=');
 
 						if (strOptions[0] == "input")
 						{
@@ -147,8 +147,6 @@
 
 		xmlAttr = enumCategory.Attribute(XmlNS + "Comment");
 		if (xmlAttr != null) { strEnumBody += _TAB + _XMLCMTBGN + xmlAttr.Value + _XMLCMTEND + _CRLF; xmlAttr = null; }
-
-		xmlAttr = enumCategory.Attribute(XmlNS + "UseUE4NamingRule");
 
 		xmlAttr = enumCategory.Attribute(XmlNS + "EnumName");
 		if (xmlAttr != null)

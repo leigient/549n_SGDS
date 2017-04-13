@@ -1,0 +1,6 @@
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\CS2ExcelExportTest\bin\Debug\CS2ExcelExportTest.dll
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\CS2ExcelExportTest\obj\Debug\CS2ExcelExportTest.dll
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\CS2ExcelExportTest\obj\Debug\CS2ExcelExportTest.pdb
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\CS2ExcelExportTest\bin\Debug\CS2ExcelExportTest.pdb
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\CS2ExcelExportTest\bin\Debug\System.Management.Automation.dll
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\CS2ExcelExportTest\obj\Debug\CS2ExcelExportTest.csprojResolveAssemblyReference.cache

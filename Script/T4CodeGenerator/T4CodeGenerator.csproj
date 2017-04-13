@@ -46,7 +46,12 @@
       <DependentUpon>genSampleEnumType.tt</DependentUpon>
       <SubType>Designer</SubType>
     </None>
-    <None Include="Scripts\T4CommonDefine.t4" />
+    <None Include="Scripts\T4SharedModule.t4" />
+    <None Include="Scripts\verifyXMLData.log">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>verifyXMLData.tt</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\genSampleCID.tt">
@@ -56,6 +61,10 @@
     <Content Include="Scripts\genSampleEnumType.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>genSampleEnumType.xsd</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\verifyXMLData.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>verifyXMLData.log</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

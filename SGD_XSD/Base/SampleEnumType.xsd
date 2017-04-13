@@ -48,4 +48,17 @@
 		</xs:restriction>
 	</xs:simpleType>
 
+	<!--확장 Enum Type-->
+	<xs:simpleType name="ExtEnumType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration id="ExtEnumType_0000000000000000" value="ExtEnumType_NONE" />
+			<xs:enumeration id="ExtEnumType_0000000000000001" value="ExtEnumType_SampleCID" />	<!--SampleCID.xsd-->
+			<xs:enumeration id="ExtEnumType_0000000000000002" value="ExtEnumType_SampleGenderType" />	<!--SampleGenderType in SampleEnumType-->
+			<xs:enumeration id="ExtEnumType_0000000000000003" value="ExtEnumType_ResourceFileName" />	<!--FileName-->
+			<xs:enumeration id="ExtEnumType_0000000000000004" value="ExtEnumType_Int" />	<!--Int-->
+			<xs:enumeration id="ExtEnumType_0000000000000005" value="ExtEnumType_String" />	<!--String-->
+			<xs:enumeration id="ExtEnumType_0000000000000006" value="ExtEnumType_MAX" />
+		</xs:restriction>
+	</xs:simpleType>
+
 </xs:schema>

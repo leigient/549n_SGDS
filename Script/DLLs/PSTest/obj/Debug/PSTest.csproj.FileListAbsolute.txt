@@ -1,0 +1,7 @@
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\bin\Debug\PSTest.exe.config
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\bin\Debug\PSTest.exe
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\bin\Debug\PSTest.pdb
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\bin\Debug\System.Management.Automation.dll
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\obj\Debug\PSTest.csprojResolveAssemblyReference.cache
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\obj\Debug\PSTest.exe
+C:\Work\DevSupport\549n_SGDS\Script\DLLs\PSTest\obj\Debug\PSTest.pdb

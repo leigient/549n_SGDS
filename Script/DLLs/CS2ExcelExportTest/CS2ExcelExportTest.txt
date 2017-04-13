@@ -1,0 +1,31 @@
+﻿[참고 URL]
+
+- http://csharphelper.com/blog/2013/10/make-a-c-dll-and-use-it-from-excel-vba-code/
+
+- http://analystcave.com/excel-use-c-sharp-in-excel-vba/
+: 여기서 추천하는 nuget으로 다운받는 UnmanagedExports(DllImport for .Net)은 .Net DllExport라는 라이브러리로 전환됨
+
+- https://www.nuget.org/packages/DllExport/
+: 사용법은 UnmanagedExports(DllImport for .Net)와 같음. 다만, 굳이 x86용으로 빌드하지 않아도 되서 편함.
+
+- https://msdn.microsoft.com/en-us/library/office/ff194068.aspx
+: Excel Com Object library
+
+- https://msdn.microsoft.com/en-us/library/microsoft.office.interop.excel.aspx
+
+- https://msdn.microsoft.com/en-us/library/system.management.automation.powershell(v=vs.85).aspx
+: c# system.management.automation
+
+- https://blogs.msdn.microsoft.com/kebab/2014/04/28/executing-powershell-scripts-from-c/
+: Executing PowerShell scripts from C#
+
+[메모]
+
+- 엑셀 VBA에서 C#으로 bool 값의 패러미터 넘기기가 안되는 것 같아서 걍 string으로 넘기게 코딩함.
+- 엑셀 -> vba -> C# Dll -> console cmd 호출 테스트 종료
+- C# dll 에서 메시지 박스 호출 및 cwd 변경 완료
+- C#에서 powershell script 호출을 위한 assembly(system.management.automation)는 nuget으로 설치
+ : PM> Install-Package System.Management.Automation
+- PowerShell에서 Install-Package 명령어 사용가능 <- 로컬에 없으면 자동으로 nuget 모듈 설치
+- C#에서 PowerShell 명령어를 실행하는 경우, UAC 이슈로 시스템이 제어하는 영역은 접근하지 못하는 경우도 발생
+- 

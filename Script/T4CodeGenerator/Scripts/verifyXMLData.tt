@@ -1,0 +1,262 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# #>
+<#@ import namespace="System.Collections.Specialized" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Runtime.Remoting.Messaging" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<# #>
+<# /* add namespaces */ #>
+<#@ assembly name = "System.Xml.dll" #>
+<#@ assembly name = "System.Xml.Linq.dll" #>
+<#@ import namespace = "System.Xml" #>
+<#@ import namespace = "System.Xml.Schema" #>
+<#@ import namespace = "System.Xml.Linq" #>
+<#@ import namespace = "System.IO" #>
+<#@ import namespace = "System.Diagnostics" #>
+<# #>
+<#@ output extension=".log"  encoding="0" #>
+<# #>
+<# /* include files */ #>
+<#@include file="T4SharedModule.t4" #>
+<#
+
+// 변수가 할당되고 사용되지 않을 경우 발생하는 compiler warning 0219를 disable 처리..
+#pragma warning disable 0219
+
+	// set predefined value
+	string strXmlPath = @"C:\Work\DevSupport\549n_SGDS\";
+	string strXmlFile = strXmlPath + @".\SGD_XML\GameData\SampleData.xml";
+	string strXsdFile = strXmlPath + @".\SGD_XSD\GameInfo\SampleInfo.xsd";
+	string strExtTypeData = strXmlPath + @".\SGD_XML\GameData\ExtEnumTypeData.xml";
+	string strExcelFile = "excel.xlsx";
+
+	List<string> strExtTypeList = new List<string>();
+
+	string strEnumType = "";
+	string strEnumValue = "";
+	
+	// set HeaderPrint
+	bool bHeaderPrint = false;
+
+	XNamespace XmlNS;
+	XNamespace ExtEnumXmlNS;
+
+	// replication commandline option
+    PropertyInfo parametersProperty =
+        Host
+            .GetType()
+            .GetProperty("Parameters",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+	if(parametersProperty != null)
+    {
+		StringCollection Parameters =
+			(StringCollection)parametersProperty
+				.GetValue(Host, null);
+
+		foreach (string Parameter in Parameters)
+		{
+			string[] strParams = Parameter.Split('!');
+			if (strParams[0] == "ampoption")
+			{
+				foreach(string strAmpOption in strParams)
+				{
+					string[] strOptions = strAmpOption.Split('=');
+
+					if (strOptions[0] == "input")
+					{
+						strXmlFile = strOptions[1];
+						//Write("[xml file] " + strXmlFile + _CRLF);
+					}
+					else if (strOptions[0] == "xsd")
+					{
+						strXsdFile = strOptions[1];
+						//Write("[xsd file] " + strXsdFile + _CRLF);
+					}
+					else if (strOptions[0] == "excel")
+					{
+						strExcelFile = strOptions[1];
+						//Write("[excel file] " + strXsdFile + _CRLF);
+					}
+				}
+			}
+			else { continue; }
+		}
+    }
+
+#region [check xml schema]
+
+	try
+	{
+		// Console 출력을 ko-KR로 세팅..
+		System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ko-KR");
+		System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ko-KR");
+
+		// read xml file
+		XElement xmlData = XElement.Load(@strXmlFile);
+
+		XmlSchemaSet EnumDefine = new XmlSchemaSet();
+		XDocument XmlDoc = XDocument.Load(@strXmlFile);
+
+		XmlNS = xmlData.Name.Namespace;
+		EnumDefine.Add(XmlNS.ToString(), strXsdFile);
+
+		XmlDoc.Validate( EnumDefine, (o, e) => 
+			{
+				Console.WriteLine("\r\n[XML_ERROR] {0}", e.Message);
+				if(bHeaderPrint == false)
+				{
+					Write("[excel file] " + strExcelFile + _CRLF);
+					Write("[xml   file] " + strXmlFile + _CRLF);
+					Write("[xsd   file] " + strXsdFile + _CRLF);
+					bHeaderPrint = true;
+				}
+				Write("\r\n[XML_ERROR]{0}", e.Message);
+				Debug.WriteLine("[xml error] " + e.Message); 
+			} );
+
+		// extension of verify Xml Data
+		XElement xmlExtTypeData = XElement.Load(@strExtTypeData);
+		ExtEnumXmlNS = xmlExtTypeData.Name.Namespace;
+
+		// 성능이 떨어지게 될 경우, 아래 코드를 병렬화할 것..!!
+
+		// find attribute defined by ExtEnumType at XSD
+		XElement xsdData = XElement.Load(@strXsdFile);
+
+		var complexTypeList = from data in xsdData.Elements()
+								where data.Name.LocalName == "complexType"
+								select data;
+
+		foreach (var complexType in complexTypeList.ToList())
+        {
+			var attributeList = from subdata in complexType.Elements()
+									where subdata.Name.LocalName == "attribute"
+									select subdata;
+
+			foreach(var MainAttr in attributeList.ToList())
+            {
+				foreach(var SubAttr in MainAttr.Attributes())
+                {
+					if ((SubAttr.Name.LocalName == "type") && (SubAttr.Value == "enumtype:ExtEnumType"))
+                    {
+						strExtTypeList.Add("ExtEnumType");
+                    }
+                }
+            }
+        }
+
+		// verify
+		foreach(var xmlElement in xmlData.Elements())
+        {
+			strEnumType = "";
+			strEnumValue = "";
+
+			bool IsVerified = false;
+			
+			foreach(var xmlAttr in xmlElement.Attributes())
+            {
+				if (xmlAttr.Name.LocalName == "ExtEnumType")
+                {
+					strEnumType = xmlAttr.Value;
+                }
+				else if (xmlAttr.Name.LocalName == "ExtEnumValue")
+                {
+					strEnumValue = xmlAttr.Value;
+                }
+            }
+
+			if (strEnumType == "") { PrintErrorNExit("[Error]"); }
+
+			if (strEnumType == "ExtEnumType_SampleCID")
+            {
+				string strCIDXsdFileName = strXmlPath + @".\SGD_XSD\Base\SampleCID.xsd";
+				XElement cidXmlData = XElement.Load(@strCIDXsdFileName);
+				XNamespace cidXmlNS = cidXmlData.Name.Namespace;
+
+
+				var simpleTypeList = from subdata in cidXmlData.Elements()
+										where subdata.Name.LocalName == "simpleType"
+										select subdata;
+
+				foreach (var simpleType in simpleTypeList)
+                {
+                    if ((simpleType.FirstAttribute.Name.LocalName == "name") && (simpleType.FirstAttribute.Value == "SampleCID"))
+                    {
+						XElement restrictionElement = simpleType.Element(cidXmlNS + "restriction");
+						if (restrictionElement == null) { PrintErrorNExit("[Error]"); }
+
+						foreach (var cidElement in restrictionElement.Elements())
+                        {
+							if (cidElement.Attribute("value").Value == strEnumValue)
+                            {
+								IsVerified = true;
+								break;
+                            }
+                        }
+                    }
+                }
+
+				if (IsVerified == false) { PrintErrorNExit("[Error]"); }
+            }
+			else if (strEnumType == "ExtEnumType_SampleType")
+            {
+				if (IsVerified == false) { PrintErrorNExit("[Error]"); }
+            }
+			else if (strEnumType == "ExtEnumType_ResourceFileName")
+            {
+				string strVerifedFile = "";
+
+				foreach (var ExtEnumType in xmlExtTypeData.Elements())
+                {
+					XAttribute attrExtEnumType = ExtEnumType.Attribute(ExtEnumXmlNS + "Type");
+					if (attrExtEnumType == null) { continue; }
+					
+					if (attrExtEnumType.Value == "ExtEnumType_ResourceFileName")
+                    {
+						attrExtEnumType = ExtEnumType.Attribute(ExtEnumXmlNS + "Value");
+						if (attrExtEnumType == null) { continue; }
+					
+						strVerifedFile = @"C:\Work\DevSupport\549n_SGDS\SGD_XML\" + @attrExtEnumType.Value + @strEnumValue;
+						break;
+                    }
+                }
+
+				if (File.Exists(strVerifedFile) == false) { PrintErrorNExit("[Error]"); }
+				//if (IsVerified == false) { PrintErrorNExit("[Error]"); }
+            }
+        }
+
+	}
+	catch (ReflectionTypeLoadException ex)
+	{
+		foreach(var item in ex.LoaderExceptions)
+		{
+			if(bHeaderPrint == false)
+			{
+				Write("[excel file] " + strExcelFile + _CRLF);
+				Write("[xml   file] " + strXmlFile + _CRLF);
+				Write("[xsd   file] " + strXsdFile + _CRLF);
+				bHeaderPrint = true;
+			}
+			Write("[excel verifying error] " + item.Message + _CRLF);
+		}
+	}
+	catch (Exception ex)
+    {
+		if(bHeaderPrint == false)
+		{
+			Write("[excel file] " + strExcelFile + _CRLF);
+			Write("[xml   file] " + strXmlFile + _CRLF);
+			Write("[xsd   file] " + strXsdFile + _CRLF);
+			bHeaderPrint = true;
+		}
+		Write("[excel verifying error] " + ex.Message + _CRLF);
+    }
+#endregion [check xml schema]
+
+#>

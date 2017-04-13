@@ -63,7 +63,7 @@ void PrintErrorNExit(string strError)
 {
 	Console.WriteLine("[AMPGEN][ERROR] {0}", strError);
 	Debug.WriteLine("[AMPGEN][ERROR] " + strError);
-	Environment.Exit(CMD_RETURN_ERROR);
+	//Environment.Exit(CMD_RETURN_ERROR);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
